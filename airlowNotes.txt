@@ -1,0 +1,86 @@
+1. WHAT IS OCHESTRATION IN BIG DATA?
+Ochestration is simply coordinating multiple data tasks so they run in the correct order automatically.
+
+Example pipeline:
+Extract data  -> Clean data → Train model → Send report
+without orchestraction:
+❌ You run everything manually.
+With orchestration:
+✔ System runs automatically in order.
+
+2. NEED FOR DEPENDENCY MANAGEMENTIN DATA PIPELINES
+PROBLEM WITH DEPENDENCIES
+IMAGINE:
+task b DEPENDDS ON task a
+if B runs first ... it leads to failureand wrong data
+
+Dependenmcy management means: you define "Task B should only run after task A succceeds"
+
+3. WHAT IS AIRFLOW:
+Apache Airflow: worflow orchestration tools used to schedule and manage data pipelines.
+
+THINK OF IT AS:
+Automation manager for data engineering jobs.
+
+what airflow does
+
+.schedule jobs
+.manages DEPENDENCIES
+.retries pipelines automatically 
+.shows status via UI
+
+IMPORTANT mindset
+SPARK = peocesssing engineering
+AIRFLOW: WORKFLOW manager
+
+they often work together
+============
+
+
+4. Airflow Architecture and components 
+MAIN COMPONENTS:
+*) DAG (DIRECTED ACYCLIC GRAPH)
+    A DAG =  your pipeline definition
+    this describes: tasks, and order of execution
+*) Scheduler: 
+    This is the brain
+    it decides:
+    . when tasks should run 
+    . what runs next
+*) Worker (Executor)
+    Actual worker that runs tasks.
+*) Metadata Database:
+    Stores: 
+    . task status
+    . logs
+    . execution history
+*) Web Ui:
+    Dashboard where you see:
+    . task progress
+    . failures
+    . retries
+
+ARCHITECTURE FLOW
+DAG file → Scheduler → Worker → Database → UI\
+================
+
+6.  HOW TO WRITE AIRFLOW DAG SCRIPTS (THE MOST IMPORTANT PART)
+    BASIC DAG STRUCTURE:
+    ====================================================
+    from airflow import DAG
+    from airflow.operators.python import PythonOperator
+    from datetime import datetime
+
+    def hello():
+    print("Hello Airflow")
+
+    with DAG(
+        dag_id="my_first_dag",
+        start_date=datetime(2024,1,1),
+        schedule_interval="@daily"
+    ) as dag:
+
+    task1 = PythonOperator(
+        task_id="hello_task",
+        python_callable=hello
+    )
