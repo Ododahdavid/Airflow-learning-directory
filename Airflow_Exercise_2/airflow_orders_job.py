@@ -44,7 +44,7 @@ get_execution_date_task = PythonOperator(
 )
 
 # Fetch configuration from Airflow variables
-config = Variable.get("cluster_details", deserialize_json=True)
+config = Variable.get("cluster_details", deserialize_json=True) # this means that the user has stored the variable in Airflow with the name "cluster_details" and the value is a JSON string that contains the cluster details, and we are deserializing it to get a Python dictionary that we can use to access the cluster details
 CLUSTER_NAME = config['CLUSTER_NAME']
 PROJECT_ID = config['PROJECT_ID']
 REGION = config['REGION']
@@ -53,7 +53,7 @@ PYSPARK_JOB = {
     "reference": {"project_id": PROJECT_ID},
     "placement": {"cluster_name": CLUSTER_NAME},
     "pyspark_job": {
-            "main_python_file_uri": "gs://airflow-projetcs-gds-dev/airflow-project-2/spark_code/orders_data_process.py",
+            "main_python_file_uri": "gs://test-demo-ododah/airflow-project-2/spark-jobs/orders_data_process.py",
             "args": ["--date={{ ti.xcom_pull(task_ids='get_execution_date') }}"],
         },
 }
